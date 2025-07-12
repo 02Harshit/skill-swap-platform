@@ -158,39 +158,6 @@ const Home = () => {
   );
 };
 
-const Profile = () => {
-  const { id } = useParams();
-  const user = usersData.find(u => u.id === Number(id));
-  if (!user) return <p>User not found</p>;
-
-  return (
-    <div style={{ padding: "40px", fontFamily: "Poppins, sans-serif" }}>
-      <button onClick={() => window.history.back()} style={{ marginBottom: 20 }}>⬅ Back</button>
-      <div style={styles.skillCard}>
-        <img src={user.profilePhoto} alt={user.name} style={{ ...styles.profilePhoto, marginBottom: 12 }} />
-        <h2>{user.name}</h2>
-        <p><strong>Availability:</strong> {user.availability}</p>
-        <h4>Skills:</h4>
-        <ul>
-          {user.skillsOffered.map((skill, idx) => <li key={idx}>{skill}</li>)}
-        </ul>
-        <button style={styles.requestBtn} onClick={() => alert(`Request sent to ${user.name}`)}>Send Request</button>
-      </div>
-    </div>
-  );
-};
-
-const App = () => (
-  <Router>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/profile/:id" element={<Profile />} />
-    </Routes>
-  </Router>
-);
-
-export default App;
-
 const styles = {
   wrapper: {
     fontFamily: 'Poppins, sans-serif',
@@ -307,3 +274,5 @@ const styles = {
     cursor: "pointer"
   }
 };
+
+export default Home;
