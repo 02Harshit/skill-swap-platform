@@ -23,7 +23,7 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(res.user));
 
       // Redirect (optional)
-      window.location.href = '/dashboard'; // or use React Router
+      window.location.href = '/'; // or use React Router
     } catch (err) {
        setError(typeof err === 'string' ? err : err.message || 'Login failed');
        console.error('Login Error:', err);

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { User, Search, Menu, X, Bell } from 'lucide-react';
 import styles from './Navbar.module.css';
+import { useNavigate } from 'react-router-dom'; // ✅ Import this
 
-const Navbar = ({ user, onLogin, onLogout, onSearch }) => {
+const Navbar = ({ user, onLogout, onSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate(); // ✅ Navigation hook
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -13,6 +15,10 @@ const Navbar = ({ user, onLogin, onLogout, onSearch }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLoginRedirect = () => {
+    navigate('/login'); // ✅ Redirect to /login
   };
 
   return (
@@ -25,23 +31,6 @@ const Navbar = ({ user, onLogin, onLogout, onSearch }) => {
               <span className={styles.logoText}>SS</span>
             </div>
             <span className={styles.brandName}>Skill Swap</span>
-          </div>
-
-          {/* Search Bar - Desktop */}
-          <div className={styles.searchContainer}>
-            <div className={styles.searchWrapper}>
-              <div className={styles.searchInputWrapper}>
-                <Search className={styles.searchIcon} />
-                <input
-                  type="text"
-                  placeholder="Search skills (e.g., Photoshop, Excel)"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch(e)}
-                  className={styles.searchInput}
-                />
-              </div>
-            </div>
           </div>
 
           {/* Desktop Menu */}
@@ -69,7 +58,7 @@ const Navbar = ({ user, onLogin, onLogout, onSearch }) => {
               </>
             ) : (
               <button
-                onClick={onLogin}
+                onClick={handleLoginRedirect}
                 className={`${styles.btn} ${styles.loginBtn}`}
               >
                 Login
@@ -131,7 +120,7 @@ const Navbar = ({ user, onLogin, onLogout, onSearch }) => {
               </>
             ) : (
               <button
-                onClick={onLogin}
+                onClick={handleLoginRedirect}
                 className={`${styles.btn} ${styles.mobileLoginBtn}`}
               >
                 Login

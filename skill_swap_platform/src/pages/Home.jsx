@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import Navbar from "../components/Navbar";
 
 const usersData = [
   {
@@ -118,6 +119,7 @@ const Home = () => {
 
   return (
     <div style={styles.wrapper}>
+      <Navbar />
       <header style={styles.hero}>
         <h1 style={styles.title}>🌟 Skill Swap Platform</h1>
         <p style={styles.subtitle}>Exchange talents, empower each other 💡</p>
