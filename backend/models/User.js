@@ -39,18 +39,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    skillsOffered: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Skill',
-      },
-    ],
-    skillsWanted: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Skill',
-      },
-    ],
+    skillsOffered: [String],
+    skillsWanted: [String],
     isPublic: {
       type: Boolean,
       default: true,
@@ -59,6 +49,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isProfileComplete: {
+      type: Boolean,
+      default: false,
+}
   },
   {
     timestamps: true,

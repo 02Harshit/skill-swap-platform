@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './ProfilePage.module.css';
+import axios from 'axios';
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState({
@@ -46,10 +47,26 @@ const ProfilePage = () => {
     }
   };
 
-  const handleSave = () => {
-    console.log('Saved Data:', userData);
-    // Add save logic here (e.g., API call)
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        'http://localhost:5000/api/profile',
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert('Profile saved!');
+      window.location.href = '/';
+    } catch (err) {
+      console.error(err);
+      alert('Error saving profile');
+    }
   };
+
 
   const handleDiscard = () => {
     window.location.reload(); // Simple reset for now
@@ -128,6 +145,7 @@ const ProfilePage = () => {
           <select name="availability" value={userData.availability} onChange={handleChange}>
             <option>Weekends</option>
             <option>Weekdays</option>
+            <option>Both</option>
           </select>
         </div>
 

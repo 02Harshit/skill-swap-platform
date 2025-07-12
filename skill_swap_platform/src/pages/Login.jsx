@@ -15,18 +15,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await loginUser(formData);
-      setSuccess(res.message);
+        const res = await loginUser(formData);
+        setSuccess(res.message);
 
-      // Save token to localStorage
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('user', JSON.stringify(res.user));
+        // Save token to localStorage
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
 
-      // Redirect (optional)
-      window.location.href = '/'; // or use React Router
+        if (res.user.isProfileComplete) {
+        window.location.href = '/';
+        } else {
+        window.location.href = '/setup-profile';
+        }
+
     } catch (err) {
-       setError(typeof err === 'string' ? err : err.message || 'Login failed');
-       console.error('Login Error:', err);
+        setError(typeof err === 'string' ? err : err.message || 'Login failed');
+        console.error('Login Error:', err);
     }
   };
 

@@ -14,6 +14,10 @@ app.use(express.json()); // to parse JSON requests
 // Import Routes
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
+app.use('/api/profile', require('./routes/profile'));
+app.use('/api/users', require('./routes/users'));
+
+
 
 // MongoDB Connection
 mongoose

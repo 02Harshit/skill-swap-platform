@@ -5,6 +5,8 @@ import NavBar from "./components/Navbar";
 import RegistrationPage from "./pages/RegistrationPage";
 import Home from "./pages/Home"; 
 import Login from "./pages/Login";
+import ProfilePage from './pages/ProfilePage';
+
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/setup-profile" element={<ProfilePage />} />
+
       </Routes>
     </Router>
   )
