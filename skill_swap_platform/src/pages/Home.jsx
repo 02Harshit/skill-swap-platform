@@ -1,131 +1,309 @@
 import React, { useState, useEffect } from 'react';
-import SkillCard from '../components/SkillCard';
-import Pagination from '../components/Pagination';
-import usersData from '../components/Users.json';
-import './Home.module.css';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+
+const usersData = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    profilePhoto: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+    skillsOffered: ["Photoshop", "Graphic Design", "UI/UX Design"],
+    availability: "Evenings"
+  },
+  {
+    id: 2,
+    name: "Michael Chen",
+    profilePhoto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    skillsOffered: ["JavaScript", "React", "Node.js"],
+    availability: "Weekends"
+  },
+  {
+    id: 3,
+    name: "Lisa Wang",
+    profilePhoto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+    skillsOffered: ["SEO", "Content Writing", "Marketing"],
+    availability: "Mornings"
+  },
+  {
+    id: 4,
+    name: "David Kim",
+    profilePhoto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    skillsOffered: ["Photography", "Photoshop", "Video Editing"],
+    availability: "Evenings"
+  }
+];
+
+const SkillCard = ({ user }) => {
+  const navigate = useNavigate();
+
+  const handleRequest = () => {
+    alert(`Request sent to ${user.name}`);
+  };
+
+  return (
+    <div style={styles.skillCard} onClick={() => navigate(`/profile/${user.id}`)}>
+      <div style={styles.profileSection}>
+        <img src={user.profilePhoto} alt={user.name} style={styles.profilePhoto} />
+        <div>
+          <h3 style={styles.userName}>{user.name}</h3>
+          <span style={styles.badge}>{user.availability}</span>
+        </div>
+      </div>
+      <div>
+        <h4 style={styles.skillsTitle}>🎯 Skills</h4>
+        <div style={styles.skillTags}>
+          {user.skillsOffered.map((skill, index) => (
+            <span key={index} style={styles.skillTag}>{skill}</span>
+          ))}
+        </div>
+      </div>
+      <button onClick={(e) => { e.stopPropagation(); handleRequest(); }} style={styles.requestBtn}>
+        🤝 Request
+      </button>
+    </div>
+  );
+};
+
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  if (totalPages <= 1) return null;
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  return (
+    <div style={styles.pagination}>
+      <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} style={styles.pageBtn}>⬅️</button>
+      {pages.map((p) => (
+        <button
+          key={p}
+          onClick={() => onPageChange(p)}
+          style={{
+            ...styles.pageBtn,
+            backgroundColor: p === currentPage ? "#1e40af" : "#fff",
+            color: p === currentPage ? "#fff" : "#1f2937"
+          }}
+        >
+          {p}
+        </button>
+      ))}
+      <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages} style={styles.pageBtn}>➡️</button>
+    </div>
+  );
+};
 
 const Home = () => {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState(usersData);
   const [searchQuery, setSearchQuery] = useState('');
   const [availabilityFilter, setAvailabilityFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 2;
 
-  // Load users data on component mount
   useEffect(() => {
-    setUsers(usersData);
-    setFilteredUsers(usersData);
-  }, []);
-
-  // Filter users based on search query and availability
-  useEffect(() => {
-    let filtered = users;
-
-    // Filter by search query (skills)
+    let result = usersData;
     if (searchQuery.trim()) {
-      filtered = filtered.filter(user =>
+      result = result.filter(user =>
         user.skillsOffered.some(skill =>
           skill.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
     }
-
-    // Filter by availability
     if (availabilityFilter) {
-      filtered = filtered.filter(user =>
-        user.availability === availabilityFilter
-      );
+      result = result.filter(user => user.availability === availabilityFilter);
     }
+    setFilteredUsers(result);
+    setCurrentPage(1);
+  }, [searchQuery, availabilityFilter]);
 
-    setFilteredUsers(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [searchQuery, availabilityFilter, users]);
-
-  // Get current page users
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const indexOfLast = currentPage * usersPerPage;
+  const indexOfFirst = indexOfLast - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
-  // Get unique availability options
-  const availabilityOptions = [...new Set(users.map(user => user.availability))];
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleAvailabilityChange = (e) => {
-    setAvailabilityFilter(e.target.value);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const availabilityOptions = [...new Set(usersData.map(u => u.availability))];
 
   return (
-    <div className="home-container">
-      <header className="home-header">
-        <h1 className="home-title">Skill Swap Platform</h1>
-        <p className="home-subtitle">Connect with skilled professionals and exchange knowledge</p>
+    <div style={styles.wrapper}>
+      <header style={styles.hero}>
+        <h1 style={styles.title}>🌟 Skill Swap Platform</h1>
+        <p style={styles.subtitle}>Exchange talents, empower each other 💡</p>
+        <p style={styles.userCount}>{filteredUsers.length} skilled people found</p>
       </header>
 
-      <div className="filters-section">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search by skill (e.g., Photoshop, JavaScript...)"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-input"
-          />
-        </div>
+      <section style={styles.filters}>
+        <input
+          placeholder="🔍 Search skills (e.g. React, Design...)"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          style={styles.input}
+        />
+        <select
+          value={availabilityFilter}
+          onChange={e => setAvailabilityFilter(e.target.value)}
+          style={styles.select}
+        >
+          <option value="">All Availabilities</option>
+          {availabilityOptions.map(a => <option key={a} value={a}>{a}</option>)}
+        </select>
+      </section>
 
-        <div className="filter-container">
-          <select
-            value={availabilityFilter}
-            onChange={handleAvailabilityChange}
-            className="availability-filter"
-          >
-            <option value="">All Availability</option>
-            {availabilityOptions.map(option => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="results-info">
-        <p className="results-count">
-          {filteredUsers.length === 0 
-            ? 'No users found' 
-            : `Showing ${currentUsers.length} of ${filteredUsers.length} user${filteredUsers.length !== 1 ? 's' : ''}`
-          }
-        </p>
-      </div>
-
-      <div className="users-grid">
-        {currentUsers.length > 0 ? (
-          currentUsers.map(user => (
-            <SkillCard key={user.id} user={user} />
-          ))
+      <div style={styles.grid}>
+        {currentUsers.length ? (
+          currentUsers.map(user => <SkillCard key={user.id} user={user} />)
         ) : (
-          <div className="no-results">
-            <p>No users match your search criteria.</p>
-            <p>Try adjusting your filters or search terms.</p>
-          </div>
+          <p>No matching users found.</p>
         )}
       </div>
 
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
+        onPageChange={setCurrentPage}
       />
     </div>
   );
 };
 
-export default Home;
+const Profile = () => {
+  const { id } = useParams();
+  const user = usersData.find(u => u.id === Number(id));
+  if (!user) return <p>User not found</p>;
+
+  return (
+    <div style={{ padding: "40px", fontFamily: "Poppins, sans-serif" }}>
+      <button onClick={() => window.history.back()} style={{ marginBottom: 20 }}>⬅ Back</button>
+      <div style={styles.skillCard}>
+        <img src={user.profilePhoto} alt={user.name} style={{ ...styles.profilePhoto, marginBottom: 12 }} />
+        <h2>{user.name}</h2>
+        <p><strong>Availability:</strong> {user.availability}</p>
+        <h4>Skills:</h4>
+        <ul>
+          {user.skillsOffered.map((skill, idx) => <li key={idx}>{skill}</li>)}
+        </ul>
+        <button style={styles.requestBtn} onClick={() => alert(`Request sent to ${user.name}`)}>Send Request</button>
+      </div>
+    </div>
+  );
+};
+
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/profile/:id" element={<Profile />} />
+    </Routes>
+  </Router>
+);
+
+export default App;
+
+const styles = {
+  wrapper: {
+    fontFamily: 'Poppins, sans-serif',
+    padding: "32px",
+    backgroundColor: "#f8fafc",
+    minHeight: "100vh",
+  },
+  hero: {
+    textAlign: "center",
+    padding: "40px 20px",
+    background: "linear-gradient(90deg, #1e40af, #10b981)",
+    borderRadius: "12px",
+    color: "white",
+    marginBottom: "32px"
+  },
+  title: { fontSize: "36px", marginBottom: "8px" },
+  subtitle: { fontSize: "18px", marginBottom: "16px" },
+  userCount: { fontSize: "14px", opacity: 0.9 },
+  filters: {
+    display: "flex",
+    gap: "16px",
+    marginBottom: "24px",
+    flexWrap: "wrap"
+  },
+  input: {
+    flex: 1,
+    minWidth: "250px",
+    padding: "12px 16px",
+    borderRadius: "10px",
+    border: "2px solid #e2e8f0"
+  },
+  select: {
+    padding: "12px 16px",
+    borderRadius: "10px",
+    border: "2px solid #e2e8f0"
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "20px",
+    marginBottom: "32px"
+  },
+  skillCard: {
+    backgroundColor: "white",
+    borderRadius: "12px",
+    padding: "20px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.07)",
+    transition: "all 0.3s ease",
+    cursor: "pointer"
+  },
+  profileSection: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: "16px"
+  },
+  profilePhoto: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    marginRight: "14px",
+    objectFit: "cover"
+  },
+  userName: {
+    fontSize: "18px",
+    fontWeight: "600",
+    margin: "0 0 6px"
+  },
+  badge: {
+    fontSize: "12px",
+    backgroundColor: "#d1fae5",
+    color: "#047857",
+    padding: "2px 8px",
+    borderRadius: "8px"
+  },
+  skillsTitle: {
+    fontSize: "14px",
+    color: "#1f2937",
+    fontWeight: "500",
+    marginBottom: "8px"
+  },
+  skillTags: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px"
+  },
+  skillTag: {
+    backgroundColor: "#1e40af",
+    color: "white",
+    padding: "5px 12px",
+    fontSize: "12px",
+    borderRadius: "10px"
+  },
+  requestBtn: {
+    marginTop: "16px",
+    backgroundColor: "#10b981",
+    color: "white",
+    border: "none",
+    padding: "10px 16px",
+    borderRadius: "10px",
+    fontWeight: "600",
+    cursor: "pointer"
+  },
+  pagination: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "8px"
+  },
+  pageBtn: {
+    padding: "8px 12px",
+    borderRadius: "8px",
+    border: "1px solid #1e40af",
+    backgroundColor: "#fff",
+    color: "#1e40af",
+    cursor: "pointer"
+  }
+};
