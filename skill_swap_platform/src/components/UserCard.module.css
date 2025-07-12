@@ -1,0 +1,254 @@
+.card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f4f6;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.header {
+  padding: 1.5rem 1.5rem 1rem;
+}
+
+.userSection {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.avatarContainer {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.avatar {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: -0.25rem;
+  right: -0.25rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: #10b981;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.userName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.locationIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.starsContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.star {
+  width: 1rem;
+  height: 1rem;
+}
+
+.starFilled {
+  color: #fbbf24;
+  fill: currentColor;
+}
+
+.starEmpty {
+  color: #d1d5db;
+}
+
+.ratingText {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.skillsSection {
+  padding: 0 1.5rem 1rem;
+}
+
+.skillGroup {
+  margin-bottom: 1rem;
+}
+
+.skillGroup:last-child {
+  margin-bottom: 0;
+}
+
+.skillGroupTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skillTag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+}
+
+.skillOffered {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.skillWanted {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+
+.skillMore {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.availability {
+  display: flex;
+  align-items: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.availabilityIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+}
+
+.footer {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footerIcon {
+  width: 1rem;
+  height: 1rem;
+  color: #6b7280;
+}
+
+.footerText {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.requestBtn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.requestBtnActive {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.requestBtnActive:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.requestBtnDisabled {
+  background-color: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.requestBtnDisabled:hover {
+  background-color: #d1d5db;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1rem 0.75rem;
+  }
+  
+  .skillsSection {
+    padding: 0 1rem 0.75rem;
+  }
+  
+  .footer {
+    padding: 0.75rem 1rem;
+  }
+  
+  .userSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .avatarContainer {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+  
+  .requestBtn {
+    width: 100%;
+  }
+}
